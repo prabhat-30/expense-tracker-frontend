@@ -1,0 +1,100 @@
+| Operation           | Endpoint                              |
+| ------------------- | ------------------------------------- |
+| Add Expense         | `/expenses`                           |
+| Get All Expenses    | `/expenses`                           |
+| Delete Expense      | `/expenses/{id}`                      |
+| Update Expense      | `/expenses/{id}`                      |
+| Recent Transactions | `/expenses/analytics/recent`          |
+| Category Totals     | `/expenses/analytics/category-totals` |
+| Monthly Totals      | `/expenses/analytics/monthly`         |
+| Yearly Totals       | `/expenses/analytics/yearly`          |
+| Highest Expense     | `/expenses/analytics/highest`         |
+| Total Expense       | `/expenses/analytics/total`           |
+| Expense Count       | `/expenses/analytics/count`           |
+| Average Expense     | `/expenses/analytics/average`         |
+
+
+
+
+Authentication Endpoints
+
+POST /auth/register: Registers a new user account with validated credentials.
+POST /auth/login: Authenticates a user and returns an authorization response/token.
+
+Expense Management Endpoints
+
+POST /api/expenses: Adds a single new expense record for the authenticated user.
+POST /api/expenses/bulk: Allows for the simultaneous addition of multiple expense records.
+GET /api/expenses: Retrieves a paginated list of all expenses belonging to the user.
+GET /api/expenses/{id}: Fetches the details of a specific expense by its unique ID.
+PUT /api/expenses/{id}: Updates the information of an existing expense record.
+DELETE /api/expenses/{id}: Removes a specific expense record by its ID.
+DELETE /api/expenses: Deletes every expense record associated with the authenticated user.
+
+
+Search and Filter Endpoints
+
+GET /api/expenses/category/{category}: Filters expenses based on a specific category name.
+GET /api/expenses/search/by-title: Searches for expenses containing a specific title string.
+GET /api/expenses/amount/{amount}: Finds all expenses that match a specific numerical amount.
+GET /api/expenses/title/{title}/category/{category}: Filters expenses by both a specific title and a category.
+GET /api/expenses/search/by-amount-greater-than: Retrieves expenses where the amount exceeds a specified value.
+GET /api/expenses/date/{date}: Lists all expenses recorded on a specific calendar date.
+GET /api/expenses/date-between: Finds expenses within a specific start and end date range.
+
+User Analytics Endpoints
+
+GET /api/expenses/analytics/total: Returns the sum total of all expenses for the user.
+GET /api/expenses/analytics/count: Provides the total count of expense entries created.
+GET /api/expenses/analytics/highest: Identifies the single highest expense record in the user's history.
+GET /api/expenses/analytics/recent: Lists the most recent transactions performed by the user
+GET /api/expenses/analytics/category-totals: Groups and sums expenses by their respective categories.
+GET /api/expenses/analytics/monthly: Provides a breakdown of total spending for each month.
+GET /api/expenses/analytics/yearly: Provides a breakdown of total spending for each year.
+GET /api/expenses/analytics/average: Calculates the average cost across all user expenses.
+
+Report and Export Endpoints
+
+GET /reports/pdf: Generates and downloads a PDF document containing the user's expense report.
+GET /reports/excel: Exports the user's expense data into a downloadable Excel (.xlsx) file.
+GET /reports/csv: Exports the user's expense data into a downloadable CSV text file.
+GET /reports/monthly: Returns a detailed list of expenses for a specific year and month.
+GET /reports/yearly/{year}: Retrieves a comprehensive summary of expenses for an entire year.
+GET /reports/highest-month/{year}: Identifies which month had the highest spending within a given year.
+GET /reports/savings: Calculates the difference between income and expenses to determine savings.
+GET /reports/growth: Analyzes the percentage growth of expenses compared to the previous year.
+GET /reports/most-used-category: Identifies the category that appears most frequently in the user's records.
+GET /reports/monthly-summary/{year}: Returns a map of total spending for every month in a specific year.
+GET /reports/category-summary/{year}: Returns a map of total spending per category for a specific year.
+
+Admin Endpoints
+
+GET /admin/analytics: Retrieves high-level system-wide analytics for administrator review.
+GET /admin/users: Lists all users currently registered in the system.
+PUT /admin/disable/{id}: Disables a specific user account by its ID.
+PUT /admin/enable/{id}: Re-enables a previously disabled user account.
+PUT /admin/role/{id}: Updates the security role (e.g., USER to ADMIN) of a specific user.
+DELETE /admin/user/{id}: Permanently removes a user account from the system.
+GET /admin/audit-logs: Retrieves a list of system audit logs for security tracking.
+
+
+ <option value="">All Categories</option>
+ <option value="Food">Food</option>
+ <option value="Recharge">Recharge</option>                                   <option value="Shopping">Shopping</option>
+ <option value="Travel">Travel</option>
+ <option value="Healthcare">Healthcare</option>
+ <option value="Entertainment">Entertainment</option>
+ <option value="Bills">Bills</option>
+ <option value="Education">Education</option>
+ <option value="Groceries">Groceries</option>
+ <option value="Transportation">Transportation</option>
+ <option value="Investment">Investment</option>
+ <option value="Insurance">Insurance</option>
+ <option value="Entertainment">Entertainment</option>
+ <option value="Rent">Rent</option>
+ <option value="Emi">Emi</option>
+ <option value="Salary">Salary</option>
+ <option value="Utilities">Utilities</option>
+ <option value="Subscription">Subscription</option>
+ <option value="Daily Essentials">Daily Essentials</option>
+ <option value="Others">Others</option>
