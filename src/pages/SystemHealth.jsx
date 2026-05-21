@@ -7,6 +7,7 @@ import "../CSS/dashboard.css";
 
 export default function SystemHealth() {
     const [health, setHealth] = useState(null);
+    const [sysConfig, setSysConfig] = useState(null); // Added state for the custom SystemConfigController
     const [loading, setLoading] = useState(true);
     const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -14,15 +15,22 @@ export default function SystemHealth() {
         const fetchSystemHealthMetrics = async () => {
             try {
                 setLoading(true);
-                // Hit the Spring Boot Actuator health route securely
-                const response = await API.get("/actuator/health");
-                setHealth(response.data.components || response.data);
+
+                // Fetch BOTH the standard Actuator and our custom dynamic System config concurrently
+                const [healthResponse, configResponse] = await Promise.all([
+                    API.get("/actuator/health").catch(error => {
+                        return error.response || { data: {} }; // Safe fallback for actuator
+                    }),
+                    API.get("/api/system/status").catch(() => {
+                        return { data: null }; // Safe fallback if config controller is missing
+                    })
+                ]);
+
+                setHealth(healthResponse.data.components || healthResponse.data);
+                setSysConfig(configResponse.data);
+
             } catch (error) {
                 console.error("Failed to read system status outlays:", error);
-                // Fallback structure if the server returns non-200 while partly degraded
-                if (error.response && error.response.data) {
-                    setHealth(error.response.data.components || error.response.data);
-                }
             } finally {
                 setLoading(false);
             }
@@ -68,8 +76,20 @@ export default function SystemHealth() {
     // Isolate component attributes natively with safe fallbacks
     const dbStatus = health?.db?.status || "UNKNOWN";
     const diskStatus = health?.diskSpace?.status || "UNKNOWN";
-    const mailStatus = health?.mail?.status || "UNKNOWN";
     const cronPingStatus = health?.ping?.status || "UNKNOWN";
+
+    // Dynamic Status: If using HTTP Resend, force it to UP based on our config. Else fallback to standard SMTP actuator.
+    const mailStatus = sysConfig?.emailBadge === "ONLINE" ? "UP" : (health?.mail?.status || "UNKNOWN");
+
+    // Dynamic Database Display Labels
+    const dbNameDisplay = sysConfig?.dbName || "MySQL Database";
+    const dbQueryDisplay = sysConfig?.dbType === "POSTGRESQL" ? "SELECT 1" : (health?.db?.details?.validationQuery || "isValid()");
+
+    // Dynamic Email Server Display Labels
+    const mailChannelDisplay = sysConfig?.emailType === "HTTP" ? "Notification HTTP Channel" : "Notification SMTP Channel";
+    const mailNameDisplay = sysConfig?.emailName || "Gmail SMTP Server";
+    const mailPrefixDisplay = sysConfig?.emailType === "HTTP" ? "Target Node: " : "Target Relay Port Node: ";
+    const mailTargetDisplay = sysConfig?.emailType === "HTTP" ? "api.resend.com:443" : (health?.mail?.details?.location || "smtp.gmail.com:587");
 
     return (
         <div className="app-layout dark-theme">
@@ -123,7 +143,7 @@ export default function SystemHealth() {
                     {/* INTERACTIVE COMPONENT GRID LAYERS */}
                     <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "35px" }}>
 
-                        {/* 1. MySQL Database Node Card */}
+                        {/* 1. Dynamic Database Node Card */}
                         <div
                             className="card"
                             style={{ background: "#1e293b", borderTop: `4px solid ${dbStatus === "UP" ? "#10b981" : "#ef4444"}`, borderLeft: "1px solid #334155", borderRight: "1px solid #334155", borderBottom: "1px solid #334155", borderRadius: "12px", padding: "22px", display: "flex", flexDirection: "column", gap: "12px", transition: "all 0.3s ease" }}
@@ -134,13 +154,13 @@ export default function SystemHealth() {
                                 <h3 style={{ color: "#94a3b8", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "700", margin: 0 }}>Relational Store Matrix</h3>
                                 <span style={{ background: dbStatus === "UP" ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)", padding: "4px 10px", borderRadius: "6px", color: dbStatus === "UP" ? "#10b981" : "#ef4444", fontSize: "0.78rem", fontWeight: "700" }}>{dbStatus === "UP" ? "ONLINE" : "OFFLINE"}</span>
                             </div>
-                            <p style={{ color: "#fff", fontSize: "1.45rem", fontWeight: "600", margin: 0 }}>MySQL Database</p>
+                            <p style={{ color: "#fff", fontSize: "1.45rem", fontWeight: "600", margin: 0 }}>{dbNameDisplay}</p>
                             <div style={{ color: "#64748b", fontSize: "0.8rem", fontFamily: "monospace", marginTop: "5px" }}>
-                                Connection verification query loop: <span style={{ color: "#38bdf8" }}>{health?.db?.details?.validationQuery || "none"}</span>
+                                Connection verification query loop: <span style={{ color: "#38bdf8" }}>{dbQueryDisplay}</span>
                             </div>
                         </div>
 
-                        {/* 2. Google Mail Server Node Card */}
+                        {/* 2. Dynamic Mail Server Node Card */}
                         <div
                             className="card"
                             style={{ background: '#1e293b', borderTop: `4px solid ${mailStatus === "UP" ? "#06b6d4" : "#ef4444"}`, borderLeft: "1px solid #334155", borderRight: "1px solid #334155", borderBottom: "1px solid #334155", borderRadius: "12px", padding: "22px", display: "flex", flexDirection: "column", gap: "12px", transition: "all 0.3s ease" }}
@@ -148,12 +168,12 @@ export default function SystemHealth() {
                             onMouseOut={removeCardGlowHover}
                         >
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                <h3 style={{ color: "#94a3b8", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "700", margin: 0 }}>Notification SMTP Channel</h3>
+                                <h3 style={{ color: "#94a3b8", fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: "700", margin: 0 }}>{mailChannelDisplay}</h3>
                                 <span style={{ background: mailStatus === "UP" ? "rgba(6, 182, 212, 0.15)" : "rgba(239, 68, 68, 0.15)", padding: "4px 10px", borderRadius: "6px", color: mailStatus === "UP" ? "#06b6d4" : "#ef4444", fontSize: "0.78rem", fontWeight: "700" }}>{mailStatus === "UP" ? "CONNECTED" : "FAILED"}</span>
                             </div>
-                            <p style={{ color: "#fff", fontSize: "1.45rem", fontWeight: "600", margin: 0 }}>Gmail SMTP Server</p>
+                            <p style={{ color: "#fff", fontSize: "1.45rem", fontWeight: "600", margin: 0 }}>{mailNameDisplay}</p>
                             <div style={{ color: "#64748b", fontSize: "0.8rem", fontFamily: "monospace", marginTop: "5px" }}>
-                                Target Relay Port Node: <span style={{ color: "#38bdf8" }}>{health?.mail?.details?.location || "smtp.gmail.com:587"}</span>
+                                {mailPrefixDisplay} <span style={{ color: "#38bdf8" }}>{mailTargetDisplay}</span>
                             </div>
                         </div>
 
