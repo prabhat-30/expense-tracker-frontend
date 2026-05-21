@@ -204,7 +204,7 @@ body{
     padding-right: 60px; /* Adjusting for a clean right margin */
 }
 
-./* Specific for Security/Audit Logs Table */
+/* Specific for Security/Audit Logs Table */
  .logs-table th:first-child,
  .logs-table td:first-child {
      width: 60px; /* Serial Number column only needs a little space */
