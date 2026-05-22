@@ -231,61 +231,68 @@ export default function AllExpenses() {
                         <div style={{ color: '#64748b', padding: '40px', textAlign: 'center', background: '#1e293b', borderRadius: '8px' }}>No transaction matches found.</div>
                     ) : (
                         <>
-                            <div className="bulk-header-grid" style={{ gridTemplateColumns: '50px 2fr 1fr 1fr 1.5fr 1.5fr 3.2fr' }}>
-                                <span>#</span><span>Title</span><span>Amount</span><span>Type</span><span>Category</span><span>Date</span><span style={{ textAlign: 'center' }}>Actions</span>
-                            </div>
+                            {/* NEW: Wrapper container for horizontal scrolling on mobile */}
+                            <div style={{ overflowX: 'auto', width: '100%', paddingBottom: '10px' }}>
+                                <div style={{ minWidth: '1000px' }}>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '10px' }}>
-                                {expenses.map((row, index) => {
-                                    const isRowRecurring = row.recurring || row.isRecurring || false;
+                                    <div className="bulk-header-grid" style={{ gridTemplateColumns: '50px 2fr 1fr 1fr 1.5fr 1.5fr 3.2fr' }}>
+                                        <span>#</span><span>Title</span><span>Amount</span><span>Type</span><span>Category</span><span>Date</span><span style={{ textAlign: 'center' }}>Actions</span>
+                                    </div>
 
-                                    const matchedCategoryObj = activeCategories.find(
-                                        (cat) => cat.name?.trim().toUpperCase() === row.category?.trim().toUpperCase()
-                                    );
-                                    const displayIcon = matchedCategoryObj ? matchedCategoryObj.icon : "🏷️";
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '10px' }}>
+                                        {expenses.map((row, index) => {
+                                            const isRowRecurring = row.recurring || row.isRecurring || false;
 
-                                    return (
-                                        <div key={row.id || index} className="bulk-row-grid" style={{ gridTemplateColumns: '50px 2fr 1fr 1fr 1.5fr 1.5fr 3.2fr', alignItems: 'center', background: '#1e293b', padding: '12px 10px', borderRadius: '6px' }}>
-                                            <span className="row-number">{page * 10 + index + 1}</span>
-                                            <span style={{ color: '#fff', fontWeight: '500' }}>{row.title}</span>
+                                            const matchedCategoryObj = activeCategories.find(
+                                                (cat) => cat.name?.trim().toUpperCase() === row.category?.trim().toUpperCase()
+                                            );
+                                            const displayIcon = matchedCategoryObj ? matchedCategoryObj.icon : "🏷️";
 
-                                            {/* 🌟 FIXED: Implemented en-IN formatting with maximum/minimum bounds */}
-                                            <span style={{ color: row.type?.toUpperCase() === "INCOME" ? "#34d399" : "#f87171", fontWeight: '700', whiteSpace: 'nowrap' }}>
-                                                {currencySymbol} {Number(row.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                            </span>
+                                            return (
+                                                <div key={row.id || index} className="bulk-row-grid" style={{ gridTemplateColumns: '50px 2fr 1fr 1fr 1.5fr 1.5fr 3.2fr', alignItems: 'center', background: '#1e293b', padding: '12px 10px', borderRadius: '6px' }}>
+                                                    <span className="row-number">{page * 10 + index + 1}</span>
+                                                    <span style={{ color: '#fff', fontWeight: '500' }}>{row.title}</span>
 
-                                            <span style={{ fontSize: '0.8rem', fontWeight: '600', padding: '2px 6px', borderRadius: '4px', background: row.type?.toUpperCase() === "INCOME" ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)', color: row.type?.toUpperCase() === "INCOME" ? '#34d399' : '#f87171', width: 'fit-content' }}>{row.type}</span>
+                                                    {/* 🌟 FIXED: Implemented en-IN formatting with maximum/minimum bounds */}
+                                                    <span style={{ color: row.type?.toUpperCase() === "INCOME" ? "#34d399" : "#f87171", fontWeight: '700', whiteSpace: 'nowrap' }}>
+                                                        {currencySymbol} {Number(row.amount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    </span>
 
-                                            <span style={{ color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                <span>{displayIcon}</span>
-                                                <span>{row.category}</span>
-                                            </span>
+                                                    <span style={{ fontSize: '0.8rem', fontWeight: '600', padding: '2px 6px', borderRadius: '4px', background: row.type?.toUpperCase() === "INCOME" ? 'rgba(52,211,153,0.1)' : 'rgba(248,113,113,0.1)', color: row.type?.toUpperCase() === "INCOME" ? '#34d399' : '#f87171', width: 'fit-content' }}>{row.type}</span>
 
-                                            <span style={{ color: '#94a3b8', whiteSpace: 'nowrap' }}>{new Date(row.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                                                    <span style={{ color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                        <span>{displayIcon}</span>
+                                                        <span>{row.category}</span>
+                                                    </span>
 
-                                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center' }}>
-                                                {/* 🌟 ENTERPRISE UPGRADE: Dynamic design-compliant inline prompt safely avoiding thread blocking window dialogue controls */}
-                                                {activeStopPromptId === row.id ? (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(245,158,11,0.1)', padding: '4px 8px', borderRadius: '6px', border: '1px solid rgba(245,158,11,0.3)' }}>
-                                                        <span style={{ fontSize: '11px', color: '#fbbf24', fontWeight: '600' }}>Stop Repeat?</span>
-                                                        <button type="button" style={{ background: '#34d399', color: '#fff', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: '600' }} onClick={() => handleStopRepeat(row.id)}>Yes</button>
-                                                        <button type="button" style={{ background: '#475569', color: '#fff', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: '600' }} onClick={() => setActiveStopPromptId(null)}>No</button>
-                                                    </div>
-                                                ) : (
-                                                    <>
-                                                        {isRowRecurring && (
-                                                            <button type="button" className="action-btn" style={{ background: '#0284c7', color: '#fff', fontSize: '12px', padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600' }} onClick={() => setActiveStopPromptId(row.id)}>
-                                                                Stop Repeat
-                                                            </button>
+                                                    <span style={{ color: '#94a3b8', whiteSpace: 'nowrap' }}>{new Date(row.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+
+                                                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', alignItems: 'center' }}>
+                                                        {/* 🌟 ENTERPRISE UPGRADE: Dynamic design-compliant inline prompt safely avoiding thread blocking window dialogue controls */}
+                                                        {activeStopPromptId === row.id ? (
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(245,158,11,0.1)', padding: '4px 8px', borderRadius: '6px', border: '1px solid rgba(245,158,11,0.3)' }}>
+                                                                <span style={{ fontSize: '11px', color: '#fbbf24', fontWeight: '600' }}>Stop Repeat?</span>
+                                                                <button type="button" style={{ background: '#34d399', color: '#fff', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: '600' }} onClick={() => handleStopRepeat(row.id)}>Yes</button>
+                                                                <button type="button" style={{ background: '#475569', color: '#fff', border: 'none', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', cursor: 'pointer', fontWeight: '600' }} onClick={() => setActiveStopPromptId(null)}>No</button>
+                                                            </div>
+                                                        ) : (
+                                                            <>
+                                                                {isRowRecurring && (
+                                                                    <button type="button" className="action-btn" style={{ background: '#0284c7', color: '#fff', fontSize: '12px', padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600' }} onClick={() => setActiveStopPromptId(row.id)}>
+                                                                        Stop Repeat
+                                                                    </button>
+                                                                )}
+                                                                <button type="button" className="action-btn" style={{ background: '#4f46e5', color: '#fff', fontSize: '12px', padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600' }} onClick={() => openEditModal(row)}>Edit</button>
+                                                                <button type="button" className="action-btn" style={{ background: '#dc2626', color: '#fff', fontSize: '12px', padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600' }} onClick={() => requestDelete(row)}>Delete</button>
+                                                            </>
                                                         )}
-                                                        <button type="button" className="action-btn" style={{ background: '#4f46e5', color: '#fff', fontSize: '12px', padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600' }} onClick={() => openEditModal(row)}>Edit</button>
-                                                        <button type="button" className="action-btn" style={{ background: '#dc2626', color: '#fff', fontSize: '12px', padding: '8px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: '600' }} onClick={() => requestDelete(row)}>Delete</button>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                </div>
                             </div>
 
                             {totalPages > 1 && (

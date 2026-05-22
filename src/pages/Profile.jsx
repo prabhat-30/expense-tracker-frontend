@@ -27,7 +27,7 @@ export default function Profile() {
     const [recentLogs, setRecentLogs] = useState([]);
 
     // Profile Identity Tracking States
-    const [userData, setUserData] = useState({ name: "User Account", username: "", email: "", phoneNo: "Not Linked" });
+    const [userData, setUserData] = useState({ name: "", username: "", email: "", phoneNo: "Not Linked" });
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
     const [editForm, setEditForm] = useState({ name: "", username: "", email: "", phoneNo: "", password: "" });
     const [editError, setEditError] = useState("");
