@@ -1,3 +1,4 @@
+/* ================= LAYOUT & CONTAINERS ================= */
 .analytics-container {
     padding: 20px;
 }
@@ -9,6 +10,7 @@
     margin-top: 20px;
 }
 
+/* ================= CARDS ================= */
 .chart-card {
     background: #1e293b;
     border-radius: 12px;
@@ -33,10 +35,10 @@
 }
 
 .card-header p {
-    color: #e2e8f0; /* Changed from #94a3b8 to Soft White */
+    color: #e2e8f0;
     margin: 5px 0 0 0;
     font-size: 0.85rem;
-    opacity: 0.9; /* Keeps it ambient but readable */
+    opacity: 0.9;
 }
 
 .chart-wrapper {
@@ -44,31 +46,20 @@
     position: relative;
 }
 
-.loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: #f8fafc;
-    background: #0f172a;
-    font-weight: 500;
-}
-/* Add this to your analytics.css */
-
+/* ================= BUDGET SPECIFIC ================= */
 .budget-card {
-    height: 460px; /* Matches the approximate height of your chart cards */
+    height: 460px;
     display: flex;
     flex-direction: column;
 }
 
 .budget-list {
     flex-grow: 1;
-    overflow-y: auto; /* Makes it scrollable */
+    overflow-y: auto;
     padding-right: 10px;
     margin-top: 10px;
 }
 
-/* Optional: Custom scrollbar for a better look */
 .budget-list::-webkit-scrollbar {
     width: 6px;
 }
@@ -78,9 +69,18 @@
     border-radius: 10px;
 }
 
+/* ================= UTILITIES & STATUS ================= */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #f8fafc;
+    background: #0f172a;
+    font-weight: 500;
+}
 
-/* security logs for user */
-
+/* Security logs for user */
 .status-badge {
     padding: 4px 10px;
     border-radius: 6px;
@@ -93,3 +93,10 @@
 .status-badge-red { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
 .status-badge-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
 .status-badge-gray { background: rgba(148, 163, 184, 0.1); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.2); }
+
+/* ================= MEDIA QUERIES ================= */
+@media (max-width: 600px) {
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+}
