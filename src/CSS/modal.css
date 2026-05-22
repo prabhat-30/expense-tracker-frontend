@@ -1,305 +1,245 @@
 /* ================= OVERLAY ================= */
-
-.modal-overlay{
-    position:fixed;
-    inset:0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter:blur(6px);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:2000;
-    animation:fadeIn 0.25s ease;
-}
-
-/* ================= CONTAINER ================= */
-
-.modal-container{
-    width:450px;
-    background: var(--bg-light);
-    color: var(--text-dark);
-    border-radius:24px;
-    padding:30px;
-    box-shadow:
-        0 20px 50px rgba(0,0,0,0.25);
-    animation:slideUp 0.3s ease;
-}
-
-/* ================= HEADER ================= */
-
-.modal-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
-}
-
-.modal-header h2{
-    font-size:24px;
-    color:#0f172a;
-    font-weight:700;
-}
-
-/* ================= CLOSE BUTTON ================= */
-
-.close-btn{
-    width:38px;
-    height:38px;
-    border:none;
-    border-radius:12px;
-    background:#eef2ff;
-    color:#4f46e5;
-    font-size:24px;
-    cursor:pointer;
-    transition:0.25s;
-}
-
-.close-btn:hover{
-    background:#4f46e5;
-    color:white;
-}
-
-/* ================= ERROR ================= */
-
-.modal-error{
-    background:#fef2f2;
-    color:#dc2626;
-    padding:12px;
-    border-radius:12px;
-    margin-bottom:18px;
-    font-size:14px;
-    font-weight:500;
-}
-
-/* ================= FORM ================= */
-
-.modal-form{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-}
-
-/* ================= GROUP ================= */
-
-.form-group{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-}
-
-.form-group label{
-    font-size:14px;
-    font-weight:600;
-    color:#334155;
-}
-
-/* Invert the calendar icon ONLY for inputs carrying this explicit class name */
-.white-calendar-icon::-webkit-calendar-picker-indicator {
-    filter: invert(1) brightness(100%) !important;
-    cursor: pointer;
-}
-
-/* ================= INPUT ================= */
-
-.form-group input,
-.form-group select{
-    padding:14px 16px;
-    border:1px solid #cbd5e1;
-    border-radius:14px;
-    font-size:15px;
-    outline:none;
-    transition:0.25s;
-    background:#f8fafc;
-}
-
-.form-group input:focus,
-.form-group select:focus{
-    border-color:#6366f1;
-    background:white;
-    box-shadow:
-        0 0 0 4px rgba(99,102,241,0.12);
-}
-
-/* ================= BUTTON ================= */
-
-.submit-btn{
-    margin-top:10px;
-    padding:15px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(
-        135deg,
-        #6366f1,
-        #4f46e5
-    );
-    color:white;
-    font-size:16px;
-    font-weight:600;
-    cursor:pointer;
-    transition:0.25s;
-}
-
-.submit-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:
-        0 10px 25px rgba(99,102,241,0.35);
-}
-
-.submit-btn:disabled{
-    opacity:0.7;
-    cursor:not-allowed;
-}
-
-/* ================= ANIMATION ================= */
-
-@keyframes fadeIn{
-
-    from{
-        opacity:0;
-    }
-
-    to{
-        opacity:1;
-    }
-}
-
-@keyframes slideUp{
-
-    from{
-        opacity:0;
-        transform:translateY(30px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media(max-width:600px){
-
-    .modal-container{
-        width:92%;
-        padding:22px;
-    }
-}
-
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    inset: 0; /* Replaces top, left, width, height 100% */
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.25s ease;
+}
+
+/* ================= CONTAINERS ================= */
+.modal-container {
+    width: 100%;
+    max-width: 450px; /* Replaced rigid width for mobile scaling */
+    background: #ffffff;
+    color: #111827;
+    border-radius: 24px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.3s ease;
+    margin: 0 16px; /* Prevents touching the edges on mobile */
 }
 
 .modal-box {
-  background: white;
-  color: var(--text-primary);
-  padding: 24px;
-  border-radius: 12px;
-  width: 400px;
-  text-align: center;
-  animation: fadeIn 0.2s ease-in-out;
+    width: 100%;
+    max-width: 400px; /* Replaced rigid width */
+    background: #ffffff;
+    color: #111827;
+    padding: 24px;
+    border-radius: 12px;
+    text-align: center;
+    animation: popIn 0.2s ease-in-out;
+    margin: 0 16px;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.cancel-btn {
-  padding: 8px 16px;
-  border: none;
-  background: #ccc;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.delete-btn {
-  padding: 8px 16px;
-  border: none;
-  background: #ef4444;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-@keyframes fadeIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* ================= FIX: DELETE MODAL TEXT COLOR ================= */
-
-.modal-box {
-  color: #111827;
-}
-
+/* Enforce dark text in the secondary modal box */
 .modal-box p,
 .modal-box h1,
 .modal-box h2,
 .modal-box h3,
 .modal-box span {
-  color: #111827;
+    color: #111827;
 }
 
-.modal-container{
-    background: #ffffff;
-    width: 420px;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+/* ================= HEADER ================= */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
 }
 
-.modal-container h2{
-    color: #111827;   /* FIX: dark text instead of faded gray */
+.modal-header h2,
+.modal-container h2 {
+    font-size: 24px;
+    color: #111827;
+    font-weight: 700;
+    margin: 0;
     margin-bottom: 15px;
 }
 
-.modal-body input{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    color: #111827;   /* FIX important */
-    background: #fff;
-}
-
-.modal-body input:focus{
-    outline: none;
-    border-color: #4f46e5;
-}
-
-.modal-actions{
-    display: flex;
-    justify-content: space-between; /* KEY FIX */
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn-cancel{
-    background: #e5e7eb;
-    color: #111827;
-    padding: 8px 14px;
+/* ================= CLOSE BUTTON ================= */
+.close-btn {
+    width: 38px;
+    height: 38px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-size: 24px;
     cursor: pointer;
+    transition: 0.25s;
 }
 
-.btn-save{
+.close-btn:hover {
     background: #4f46e5;
     color: white;
-    padding: 8px 14px;
+}
+
+/* ================= ALERTS ================= */
+.modal-error {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ================= FORM & INPUTS ================= */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+/* Consolidated form inputs */
+.form-group input,
+.form-group select,
+.modal-body input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    font-size: 15px;
+    color: #111827;
+    background: #f8fafc;
+    outline: none;
+    transition: 0.25s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.modal-body input:focus {
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+.white-calendar-icon::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(100%) !important;
+    cursor: pointer;
+}
+
+/* ================= ACTIONS & BUTTONS ================= */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.submit-btn {
+    margin-top: 10px;
+    padding: 15px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+}
+
+.submit-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Consolidated secondary buttons */
+.cancel-btn,
+.btn-cancel {
+    background: #e5e7eb;
+    color: #111827;
+    padding: 10px 16px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-save {
+    background: #4f46e5;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Renamed the second 'fadeIn' so it doesn't conflict with the overlay animation */
+@keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* ================= MEDIA QUERIES (MOBILE FIXES) ================= */
+@media (max-width: 600px) {
+    .modal-container,
+    .modal-box {
+        padding: 22px;
+        border-radius: 16px;
+    }
+
+    .modal-actions {
+        /* Stacks the buttons vertically on mobile for a better tap target */
+        flex-direction: column-reverse;
+        gap: 12px;
+    }
+
+    .cancel-btn,
+    .btn-cancel,
+    .btn-save,
+    .delete-btn,
+    .submit-btn {
+        width: 100%;
+        padding: 14px;
+        text-align: center;
+    }
 }
